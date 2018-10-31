@@ -6,13 +6,27 @@ const { ObjectId } = require('mongoose').Types
 const Joi = require('joi')
 
 router.get('/', async (req, res, next) => {
+  const page = parseInt(req.query.page || 1, 10)
+  if (page < 1) {
+    res.status(400)
+    res.send({ message: '잘못된 페이지입니다.' });
+    return
+  }
   try {
     const posts = await Post
       .find()
       .sort({ _id: -1 })
       .limit(10)
+      .skip((page - 1) * 10)
+      .lean()
       .exec()
-    res.send(posts);
+    const postCount = await Post.countDocuments().exec() // 마지막 페이지 알려주기
+    const limitBodyLength = post => ({
+      ...post,
+      body: post.body.length < 200 ? post.body : `${post.body.slice(0, 200)}...`
+    })
+    res.send(posts.map(limitBodyLength));
+    res.header('Last-Page', Math.ceil(postCount / 10))
   } catch (err) {
     res.status(500)
     next(err)
