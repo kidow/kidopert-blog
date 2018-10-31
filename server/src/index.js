@@ -1,4 +1,15 @@
+require('dotenv').config()
 const express = require('express')
+const mongoose = require('mongoose')
+
+mongoose.Promise = Promise
+mongoose.connect(process.env.MONGO_URL, { dbName: 'kpblog', useNewUrlParser: true }, err => {
+  if (err) {
+    console.log('몽고디비 연결 실패', err)
+  } else {
+    console.log('몽고디비 연결 성공')
+  }
+})
 
 const app = express()
 
