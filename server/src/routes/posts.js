@@ -3,7 +3,6 @@ const express = require('express')
 const router = express.Router()
 const Post = require('../models/post')
 const { ObjectId } = require('mongoose').Types
-const Joi = require('joi')
 
 router.get('/', async (req, res, next) => {
   const page = parseInt(req.query.page || 1, 10)
@@ -26,7 +25,7 @@ router.get('/', async (req, res, next) => {
       body: post.body.length < 200 ? post.body : `${post.body.slice(0, 200)}...`
     })
     res.send(posts.map(limitBodyLength));
-    res.header('Last-Page', Math.ceil(postCount / 10))
+    // res.header('Last-Page', Math.ceil(postCount / 10))
   } catch (err) {
     res.status(500)
     next(err)
