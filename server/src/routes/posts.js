@@ -2,10 +2,16 @@
 const express = require('express')
 const router = express.Router()
 const Post = require('../models/post')
+const { ObjectId } = require('mongoose').Types
+const Joi = require('joi')
 
 router.get('/', async (req, res, next) => {
   try {
-    const posts = await Post.find().exec()
+    const posts = await Post
+      .find()
+      .sort({ _id: -1 })
+      .limit(10)
+      .exec()
     res.send(posts);
   } catch (err) {
     res.status(500)
@@ -29,11 +35,15 @@ router.post('/', async (req, res, next) => {
 
 router.get('/:id', async (req, res, next) => {
   const { id } = req.params
+  if (!ObjectId.isValid(id)) {
+    res.status(400)
+    res.send({ message: '400 Bad Request' })
+  }
   try {
     const post = await Post.findById(id).exec()
     if (!post) {
       res.status(404)
-      return
+      res.send({ message: '404 Not Found' });
     }
     res.send(post);
   } catch (err) {
@@ -44,6 +54,10 @@ router.get('/:id', async (req, res, next) => {
 
 router.delete('/:id', async (req, res, next) => {
   const { id } = req.params
+  if (!ObjectId.isValid(id)) {
+    res.status(400)
+    res.send({ message: '400 Bad Request' })
+  }
   try {
     await Post.findByIdAndRemove(id).exec()
     res.status(204)
@@ -55,6 +69,10 @@ router.delete('/:id', async (req, res, next) => {
 
 router.patch('/:id', async (req, res, next) => {
   const { id } = req.params
+  if (!ObjectId.isValid(id)) {
+    res.status(400)
+    res.send({ message: '400 Bad Request' })
+  }
   try {
     const post = await Post.findByIdAndUpdate(id, req.body, {
       new: true
@@ -63,7 +81,7 @@ router.patch('/:id', async (req, res, next) => {
     }).exec()
     if (!post) {
       res.status(404)
-      return
+      res.send({ message: '404 Not Found' });
     }
     res.send(post);
   } catch (err) {
