@@ -6,6 +6,8 @@ const { ObjectId } = require('mongoose').Types
 
 router.get('/', async (req, res, next) => {
   const page = parseInt(req.query.page || 1, 10)
+  const { tag } = req.query
+  const query = tag ? { tags: tag } : {}
   if (page < 1) {
     res.status(400)
     res.send({ message: '잘못된 페이지입니다.' });
@@ -13,7 +15,7 @@ router.get('/', async (req, res, next) => {
   }
   try {
     const posts = await Post
-      .find()
+      .find(query)
       .sort({ _id: -1 })
       .limit(10)
       .skip((page - 1) * 10)
@@ -24,8 +26,8 @@ router.get('/', async (req, res, next) => {
       ...post,
       body: post.body.length < 200 ? post.body : `${post.body.slice(0, 200)}...`
     })
-    res.send(posts.map(limitBodyLength));
     res.header('Last-Page', Math.ceil(postCount / 10))
+    res.send(posts.map(limitBodyLength));
   } catch (err) {
     res.status(500)
     next(err)
