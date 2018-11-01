@@ -4,13 +4,21 @@ const router = express.Router()
 const Post = require('../models/post')
 const { ObjectId } = require('mongoose').Types
 
+const checkObjectId = (req, res, next) => {
+  const { id } = req.query
+  if(!ObjectId.isValid(id)) {
+    res.status(400)
+    return null
+  }
+  return next()
+}
+
 router.get('/', async (req, res, next) => {
   const page = parseInt(req.query.page || 1, 10)
   const { tag } = req.query
   const query = tag ? { tags: tag } : {}
   if (page < 1) {
     res.status(400)
-    res.send({ message: '잘못된 페이지입니다.' });
     return
   }
   try {
@@ -26,7 +34,7 @@ router.get('/', async (req, res, next) => {
       ...post,
       body: post.body.length < 200 ? post.body : `${post.body.slice(0, 200)}...`
     })
-    res.header('Last-Page', Math.ceil(postCount / 10))
+    res.set('Last-Page', Math.ceil(postCount / 10))
     res.send(posts.map(limitBodyLength));
   } catch (err) {
     res.status(500)
@@ -69,10 +77,6 @@ router.get('/:id', async (req, res, next) => {
 
 router.delete('/:id', async (req, res, next) => {
   const { id } = req.params
-  if (!ObjectId.isValid(id)) {
-    res.status(400)
-    res.send({ message: '400 Bad Request' })
-  }
   try {
     await Post.findByIdAndRemove(id).exec()
     res.status(204)
