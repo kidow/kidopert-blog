@@ -1,11 +1,13 @@
 import React from 'react';
 import PageTemplate from 'components/common/PageTemplate'
-import PageInfo from 'components/post/PostInfo'
+import PostInfo from 'components/post/PostInfo'
+import PostBody from 'components/post/PostBody';
 
 const PostPage = () => {
   return (
     <PageTemplate>
-      <PageInfo />
+      <PostInfo />
+      <PostBody />
     </PageTemplate>
   );
 };
