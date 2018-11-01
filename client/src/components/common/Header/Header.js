@@ -1,6 +1,7 @@
 import React from 'react';
 import './Header.scss'
 import { Link } from 'react-router-dom'
+import Button from 'components/common/Button';
 
 const Header = () => {
   return (
@@ -10,7 +11,7 @@ const Header = () => {
           <Link to='/'>reactblog</Link>
         </div>
         <div className='right'>
-          오른쪽
+          <Button theme='outline' to='/editor'>새 포스트</Button>
         </div>
       </div>
     </header>
