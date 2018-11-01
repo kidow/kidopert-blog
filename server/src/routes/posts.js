@@ -25,7 +25,7 @@ router.get('/', async (req, res, next) => {
       body: post.body.length < 200 ? post.body : `${post.body.slice(0, 200)}...`
     })
     res.send(posts.map(limitBodyLength));
-    // res.header('Last-Page', Math.ceil(postCount / 10))
+    res.header('Last-Page', Math.ceil(postCount / 10))
   } catch (err) {
     res.status(500)
     next(err)

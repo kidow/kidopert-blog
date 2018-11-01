@@ -1,11 +1,25 @@
-import { Map } from 'immutable'
+import { Map, List, fromJS } from 'immutable'
 import { handleActions, createAction } from 'redux-actions'
 import { pender } from 'redux-pender'
+import * as api from 'lib/api'
+
+const GET_POST_LIST = 'list/GET_POST_LIST'
+
+export const getPostList = createAction(GET_POST_LIST, api.getPostList, meta => meta) // ?
 
 const initialState = Map({
-
+  posts: List(),
+  lastPage: null
 })
 
 export default handleActions({
-
+  ...pender({
+    type: GET_POST_LIST,
+    onSuccess: (state, action) => {
+      const { data: posts } = action.payload
+      const lastPage = action.payload.header['last-page']
+      return state.set('posts', fromJS(posts))
+                  .set('lastPage', parseInt(lastPage, 10))
+    }
+  })
 }, initialState)
