@@ -1,17 +1,21 @@
 import React from 'react';
 import './PostInfo.scss'
+import { Link } from 'react-router-dom'
+import moment from 'moment'
 
-const PostInfo = () => {
+const PostInfo = ({publishedDate, title, tags}) => {
   return (
     <div className='post-info'>
       <div className='info'>
-        <h1>타이틀</h1>
+        <h1>{title}</h1>
         <div className='tags'>
-          <a>#태그</a>
-          <a>#태그</a>
-          <a>#태그</a>
+          {
+            tags && tags.map(
+              tag => <Link key={tag} to={`/tag/${tag}`}>#{tag}</Link>
+            )
+          }
         </div>
-        <div className='date'>Oct 29, 2017</div>
+        <div className='date'>{moment(publishedDate).format('ll')}</div>
       </div>
     </div>
   );
