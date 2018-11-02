@@ -1,7 +1,7 @@
 import React from 'react';
 import './PageTemplate.scss'
-import Footer from 'components/common/Footer';
 import HeaderContainer from 'containers/common/HeaderContainer';
+import FooterContainer from 'containers/common/FooterContainer';
 
 const PageTemplate = ({ children }) => {
   return (
@@ -10,7 +10,7 @@ const PageTemplate = ({ children }) => {
       <main>
         {children}
       </main>
-      <Footer />
+      <FooterContainer />
     </div>
   );
 };
