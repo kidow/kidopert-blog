@@ -19,7 +19,7 @@ const LoginModal = ({
           onChange={onChange} 
           onKeyPress={onKeyPress}
         />
-        { error && <div>로그인 실패</div>}
+        { error && <div className='error'>로그인 실패</div>}
         <div className='login' onClick={onLogin}>로그인</div>
       </div>
     </ModalWrapper>
