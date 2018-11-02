@@ -14,8 +14,9 @@ class FooterContainer extends Component {
       } catch (e) {
         console.log(e)
       }
+    } else {
+      BaseActions.showModal('login')
     }
-    BaseActions.showModal('login')
     BaseActions.initializeLoginModal()
   }
   

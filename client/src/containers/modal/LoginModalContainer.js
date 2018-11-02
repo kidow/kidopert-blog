@@ -6,7 +6,7 @@ import * as baseActions from 'store/modules/base'
 
 class LoginModalContainer extends Component {
   handleLogin = async () => {
-    const { BaseActions,  password } = this.props
+    const { BaseActions, password } = this.props
     try {
       await BaseActions.login(password)
       BaseActions.hideModal('login')
